@@ -1,9 +1,13 @@
-#This is the demo on how to use our correction for the impact of non-random sampling on the performance of BiSSE framework, using simulated tree
+#This is the demo on how to use our correction for the impact of non-random sampling on the performance of BiSSE framework
+#The first part is used to generate the results in our paper "using simulated tree "The influence of non-random species-sampling on macroevolutionary and macroecological inference from phylogenies"
+#The second part gives instructions on how to use our codes to account for non-random sampling using users' own tree and sampling pattern.
+
+######## PART I ##########
 library(diversitree)
 library(deSolve)
 library(nloptr)
 
-#choose a parameter set
+#Here lists all the parameter sets used in our study (Table 1).
 p <- c(0.1,0.1,0.03,0.03,0.01,0.001)
 #p <- c(0.3,0.1,0.03,0.03,0.01,0.001)
 #p <- c(0.1,0.1,0.01,0.03,0.01,0.001)
@@ -49,6 +53,10 @@ xfix <- sbplx(c(0.07,0.03,p[5],p[6]),likcal,tree=treelist$xtree,sfraction=treeli
 #fit constrainted BiSSE model to the tree using the unresolved clade correction
 lik2 <- constrain(lik,lambda0~lambda1,mu0~mu1)
 ffix <- find.mle(lik2,c(0.1,0.1,0.03,0.03,p[5],p[6]))
+
+######## PART II ##########
+library(deSolve)
+library(nloptr)
 
 #This is the demo on how to formulate user's own sampling pattern to apply our correction for non-random sampling
 #To do this, users need to prepare:
