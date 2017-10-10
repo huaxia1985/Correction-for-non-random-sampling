@@ -15,6 +15,7 @@ The following instructions are on:
 2) use the code to account for non-random sampling in user's own tree and sampling pattern.
 
 ######## Use the code to generate the results in the paper ##########
+
 Step 1: copy all the functions in the folder to R and load the related library
 library(diversitree)
 library(deSolve)
@@ -66,6 +67,7 @@ lik2 <- constrain(lik,lambda0~lambda1,mu0~mu1)
 ffix <- find.mle(lik2,c(0.1,0.1,0.03,0.03,p[5],p[6]))
 
 ######## use the code to account for non-random sampling in user's own tree and sampling pattern ##########
+
 Step 1. copy all the functions in the folder to R and load the related library
 library(deSolve)
 library(nloptr)
