@@ -19,7 +19,9 @@ The following instructions are on:
 Step 1: copy all the functions in the folder to R and load the related libraries
 
   library(diversitree)
+  
   library(deSolve)
+  
   library(nloptr)
 
 Step 2: specify a set of parameter values that include six parameters in order of speciation rate of state 0, speciation rate of state 1, extinction rate of state 0, extinction rate of state 1, transition rate from state 0 to state 1, and transition rate from state 1 to state 0. Here lists all sets of parameter values used in the paper. If you want to generate results under the first set of parameter values, then remove the hash sign in the begining of the first line.
