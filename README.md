@@ -27,47 +27,71 @@ Step 1: copy all the functions in the folder to R and load the related libraries
 Step 2: specify a set of parameter values that include six parameters in order of speciation rate of state 0, speciation rate of state 1, extinction rate of state 0, extinction rate of state 1, transition rate from state 0 to state 1, and transition rate from state 1 to state 0. Here lists all sets of parameter values used in the paper. If you want to generate results under the first set of parameter values, then remove the hash sign in the begining of the first line.
 
   #p <- c(0.1,0.1,0.03,0.03,0.01,0.001)
+  
   #p <- c(0.3,0.1,0.03,0.03,0.01,0.001)
+  
   #p <- c(0.1,0.1,0.01,0.03,0.01,0.001)
+  
   #p <- c(0.03,0.1,0.03,0.03,0.01,0.001)
+  
   #p <- c(0.1,0.1,0.09,0.03,0.01,0.001)
+  
   #p <- c(0.1,0.1,0.03,0.03,0.01,0.01)
+  
   #p <- c(0.3,0.1,0.03,0.03,0.01,0.01)
+  
   #p <- c(0.1,0.1,0.01,0.03,0.01,0.01)
+  
   #p <- c(0.03,0.1,0.03,0.03,0.01,0.01)
+  
   #p <- c(0.1,0.1,0.09,0.03,0.01,0.01)
 
 Step 3: simulate a tree, here the tree has root state 0 and 500 extant tips. A group is defined by the "Time" scheme. All the groups are sampled in the tree. A random integer between 1 and 5 representatives are sampled for each group. Please read the definition of each input and output of the tree.gen function in tree.gen.R.
+
 treelist <- try(tree.gen(pars=p,max.taxa=500,x0=0,sampling.c=1,sampling.f=5,define.clade="time"),silent=T)
-#the while loop is to make sure that the tree does not lead to extinction
+
 while(inherits(treelist,"try-error")) {
   treelist <- try(tree.gen(pars=p,max.taxa=500,x0=0,sampling.c=1,sampling.f=5,define.clade="time"),silent=T)
-}
+}  #the while loop is to make sure that the tree does not lead to extinction
 
 Step 4: fit BiSSE model to the tree using our correction. The "tlistcal" function lists all the possible locations that unsampled states and/or groups can be attached to the simulated tree. The "likcal" function calculates the overall likelihood of the tree using our correction. xfit returns the best-fit BiSEE model in xfit$par and the maximum likelihood xfit$value.
+
 tlist <- tlistcal(tree=treelist$xtree,ssize=treelist$ssize,dt=1)
+
 px <- c(p[1]-p[3],p[2]-p[4],p[3],p[4],p[5],p[6])
+
 xfit <- sbplx(px,likcal,tree=treelist$xtree,sfraction=treelist$sfraction,root.state=NULL,tlist=tlist,lower=rep(0,length(p)),upper=rep(Inf,length(p)))
 
 Step 5: fit BiSSE model to the tree using the unresolved clade correction
+
 lik <- make.bisse(treelist$ftree,treelist$ftree$tip.state,unresolved=as.data.frame(treelist$unresolved))
+
 ffit <- find.mle(lik,p)
 
 Step 6: calculate the likelihood of the true model using our correction stored in variable xtrue and record the computing time in variable xpct.
+
 pct <- proc.time()
+
 xtrue <- likcal(p=px,tree=treelist$xtree,sfraction=treelist$sfraction,root.state=NULL,tlist=tlist)
+
 xpct <- pct-proc.time()
 
 Step 7: calculate the likelihood of the true model using the unresolved clade correction stored in variable ftrue and record the computing time in variable fpct.
+
 pct <- proc.time()
+
 ftrue <- lik(p)
+
 fpct <- pct-proc.time()
 
 Step 8: fit constrained BiSSE model to the tree using our correction. The BiSSE model is constrained to have equal speciation and extinction rates for both states. xfix returns the best-fit constrained BiSEE model in xfix$par and the maximum likelihood xfix$value.
+
 xfix <- sbplx(c(0.07,0.03,p[5],p[6]),likcal,tree=treelist$xtree,sfraction=treelist$sfraction,root.state=NULL,tlist=tlist,constrained=TRUE,lower=rep(0,4),upper=rep(Inf,4))
 
 Step 9: fit constrainted BiSSE model to the tree using the unresolved clade correction
+
 lik2 <- constrain(lik,lambda0~lambda1,mu0~mu1)
+
 ffix <- find.mle(lik2,c(0.1,0.1,0.03,0.03,p[5],p[6]))
 
 ######## use the code to account for non-random sampling in user's own tree and sampling pattern ##########
