@@ -16,7 +16,8 @@ The following instructions are on:
 
 ######## Use the code to generate the results in the paper ##########
 
-Step 1: copy all the functions in the folder to R and load the related library
+Step 1: copy all the functions in the folder to R and load the related libraries
+
 library(diversitree)
 library(deSolve)
 library(nloptr)
