@@ -90,7 +90,7 @@ xfix <- sbplx(c(0.07,0.03,p[5],p[6]),likcal,tree=treelist$xtree,sfraction=treeli
 
 Step 9: fit constrainted BiSSE model to the tree using the unresolved clade correction
 
-lik2 <- constrain(lik,lambda0~lambda1,mu0~mu1)
+lik2 <- constrain(lik,lambda0 ~ lambda1,mu0 ~ mu1)
 
 ffix <- find.mle(lik2,c(0.1,0.1,0.03,0.03,p[5],p[6]))
 
