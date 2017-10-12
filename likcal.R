@@ -301,8 +301,8 @@ likcal <- function (p,tree,sfraction,root.state,tlist,constrained=FALSE) {
   	res1 <- D[,1]^2/rowSums(D)+D[,2]^2/rowSums(D)
   	res <- c(sum(D[,1]*res1),sum(D[,2]*res1))/sum(res1)
   }
-  if (is.na(res[1])||is.infinite(res[1])) {res[1] <- 10^-6}
-  if (is.na(res[2])||is.infinite(res[2])) {res[2] <- 10^-6}
+  if (is.na(res[1])||is.infinite(res[1])||res[1]<=0) {res[1] <- 10^-6}
+  if (is.na(res[2])||is.infinite(res[2])||res[2]<=0) {res[2] <- 10^-6}
   res
   }
   res <- 0
